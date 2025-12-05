@@ -289,6 +289,9 @@ def run_inference(args, gpu_num, gpu_no):
     model.perframe_ae = args.perframe_ae
     assert os.path.exists(args.ckpt_path), "Error: checkpoint Not Found!"
     model = load_model_checkpoint(model, args.ckpt_path)
+
+    model = model.half()  # to FP16 
+
     model.eval()
 
     ## run over data
@@ -325,14 +328,31 @@ def run_inference(args, gpu_num, gpu_no):
             prompts = prompt_list_rank[indice:indice+args.bs]
             videos = data_list_rank[indice:indice+args.bs]
             filenames = filename_list_rank[indice:indice+args.bs]
+            # if isinstance(videos, list):
+            #     videos = torch.stack(videos, dim=0).to("cuda")
+            # else:
+            #     videos = videos.unsqueeze(0).to("cuda")
+
+            # batch_samples = image_guided_synthesis(model, prompts, videos, noise_shape, args.n_samples, args.ddim_steps, args.ddim_eta, \
+            #                     args.unconditional_guidance_scale, args.cfg_img, args.frame_stride, args.text_input, args.multiple_cond_cfg, args.loop, args.interp, args.timestep_spacing, args.guidance_rescale)
             if isinstance(videos, list):
-                videos = torch.stack(videos, dim=0).to("cuda")
+                videos = torch.stack(videos, dim=0)
             else:
-                videos = videos.unsqueeze(0).to("cuda")
+                videos = videos.unsqueeze(0)
+        
+            #video输入改为 fp16;move to CUDA
+            videos = videos.half().to("cuda")
+        
+            batch_samples = image_guided_synthesis(
+                model, prompts, videos, noise_shape,
+                args.n_samples, args.ddim_steps, args.ddim_eta,
+                args.unconditional_guidance_scale, args.cfg_img,
+                args.frame_stride, args.text_input, args.multiple_cond_cfg,
+                args.loop, args.interp, args.timestep_spacing, args.guidance_rescale
+            )
 
-            batch_samples = image_guided_synthesis(model, prompts, videos, noise_shape, args.n_samples, args.ddim_steps, args.ddim_eta, \
-                                args.unconditional_guidance_scale, args.cfg_img, args.frame_stride, args.text_input, args.multiple_cond_cfg, args.loop, args.interp, args.timestep_spacing, args.guidance_rescale)
 
+            
             ## save each example individually
             for nn, samples in enumerate(batch_samples):
                 ## samples : [n_samples,c,t,h,w]
