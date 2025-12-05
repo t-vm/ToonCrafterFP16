@@ -1,10 +1,13 @@
 ## Introduction
-This repository modifies the inference code of the Tooncrafter project to reduce GPU memory usage. You do not need to make any changes to the model itself.
+EN:
+This repository modifies the inference code of the Tooncrafter project to reduce GPU VRAM usage. You do not need to make any changes to model weights and other related files, and you can directly apply all the steps for deploying the original repository to this one.
 
-Generated quality may be slightly affected.
+Generated quality may experience a slight decrease.
 
-本仓库对Tooncrafter项目的推理代码进行修改以达到减少显存占用的目的，您无需对模型权重等相关文件做出任何改动。
-生成质量可能受到些许影响。
+CHS:
+本仓库对Tooncrafter项目的推理代码进行修改以达到减少显存占用的目的。您无需对模型权重等相关文件做出任何改动,并可以直接把部署原仓库的一切步骤应用到本仓库上。
+
+生成质量可能有少量下滑。
 
 
 
