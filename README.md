@@ -13,7 +13,7 @@ Generated quality may be slightly affected.
 
 |Model|Resolution|GPU Mem. & Inference Time (RTX2080Ti(22GiB), ddim 50steps)|Checkpoint|
 |:---------|:---------|:--------|:--------|
-|ToonCrafter_512|320x512| ~24G & 24s (`perframe_ae=True`)|[Hugging Face](https://huggingface.co/Doubiiu/ToonCrafter/blob/main/model.ckpt)|
+|ToonCrafter_512|320x512| ~20G & 62s (`perframe_ae=True`)|[Hugging Face](https://huggingface.co/Doubiiu/ToonCrafter/blob/main/model.ckpt)|
 
 
 
